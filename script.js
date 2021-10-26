@@ -1,10 +1,36 @@
 const timeE1 = document.getElementById('time')
 const dateE1 = document.getElementById('date')
 const currentWeatherItemE1 = document.getElementById('current-weather-items')
-const timezoneE1 = document.getElementById('time-zone')
+const timezoneE1 = document.querySelector('.time-zone')
 const latlongE1 = document.getElementById('lat-long')
 const WeatherForcastE1 = document.getElementById('weather-forcast')
 const currentTempE1 = document.getElementById('current-tempi')
+const searchInput = document.querySelector(".search-input");
+const searchButton = document.querySelector(".search-button");
+
+const api_key = '8f8c2675fa275e6ce2ec39c2252522ba'
+searchButton.onclick = async function () {
+ const API_KEY = 'b0e89df602025b1b2525a9bd5f0c21d8'
+ //   const current = `http://api.openweathermap.org/data/2.5/weather?q=${search}&units=metric&appid=b0e89df602025b1b2525a9bd5f0c21d8`;
+ //   const hourly = `http://pro.openweathermap.org/data/2.5/forecast/hourly?q=${search}&appid=b0e89df602025b1b2525a9bd5f0c21d8`;
+ const exclude = 'minutely,alerts'
+ const latlonuri = `http://api.positionstack.com/v1/forward?access_key=fab80d93ef21989e45e301fbf8f51ca2&query=${searchInput.value}`
+ const latlonres = await fetch(latlonuri)
+  const latlondata = await latlonres.json();
+  const latitude = latlondata.data[0].latitude;
+  const longitude = latlondata.data[0].longitude;
+  console.log(latlondata.data[0]);
+  timezoneE1.innerHTML = latlondata.data[0].name;
+
+    fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=hourly,minutely&units=metric&appid=${api_key}
+`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+     
+        showdata(data)
+      })
+}
 
 const days = [
   'Sunday',
@@ -30,7 +56,7 @@ const months = [
   'December',
 ]
 
-const api_key = '8f8c2675fa275e6ce2ec39c2252522ba'
+
 
 setInterval(() => {
   const time = new Date()
@@ -50,7 +76,12 @@ setInterval(() => {
   dateE1.innerHTML = days[day] + ',' + date + ' ' + months[month]
 }, 1000)
 
-getData()
+if (searchInput.value == "") {
+  getData();
+  console.log("called");
+}
+
+
 
 function getData() {
   navigator.geolocation.getCurrentPosition((success) => {
@@ -60,6 +91,7 @@ function getData() {
       .then((response) => response.json())
       .then((data) => {
         console.log(data)
+        timezoneE1.innerHTML = data.timezone;
         showdata(data)
       })
   })
@@ -67,7 +99,6 @@ function getData() {
 
 function showdata(data) {
   let { humidity, pressure, sunrise, sunset, wind_speed } = data.current
-  timezoneE1.innerHTML = data.timezone
   latlongE1.innerHTML = data.lat + 'N' + '  ' + data.lon + 'E'
 
   currentWeatherItemE1.innerHTML = `<div class="weather-items">
