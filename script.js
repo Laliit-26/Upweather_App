@@ -10,7 +10,7 @@ const searchButton = document.querySelector(".search-button");
 
 const api_key = '8f8c2675fa275e6ce2ec39c2252522ba'
 searchButton.onclick = async function () {
- const API_KEY = 'b0e89df602025b1b2525a9bd5f0c21d8'
+ const API_KY = 'e1baf2089bd1253081f3b24fa4d7091a'
  //   const current = `http://api.openweathermap.org/data/2.5/weather?q=${search}&units=metric&appid=b0e89df602025b1b2525a9bd5f0c21d8`;
  //   const hourly = `http://pro.openweathermap.org/data/2.5/forecast/hourly?q=${search}&appid=b0e89df602025b1b2525a9bd5f0c21d8`;
  const exclude = 'minutely,alerts'
